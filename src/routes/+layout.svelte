@@ -1,6 +1,12 @@
 <script>
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { auth, isLoggedIn } from '../lib/auth';
+	import { signOut } from 'firebase/auth';
+
+	async function logout() {
+		await signOut(auth);
+	}
 </script>
 
 <!-- App Shell -->
@@ -14,30 +20,14 @@
 				</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://discord.gg/EXqV7W8MtY"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Discord
-				</a>
-				<a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://twitter.com/SkeletonUI"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Twitter
-				</a>
-				<a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://github.com/skeletonlabs/skeleton"
-					target="_blank"
-					rel="noreferrer"
-				>
-					GitHub
-				</a>
+				{#if $isLoggedIn}
+					<a class="btn btn-sm variant-ghost-surface" href="/user" target="_blank" rel="noreferrer">
+						User
+					</a>
+					<button type="button" class="btn variant-filled" on:click={logout}>로그아웃</button>
+				{:else}
+					You are not logged in
+				{/if}
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
