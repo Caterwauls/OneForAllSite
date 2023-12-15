@@ -10,7 +10,8 @@ import {
 	where,
 	getDocs,
 	addDoc,
-	serverTimestamp
+	serverTimestamp,
+	getCountFromServer
 } from 'firebase/firestore';
 
 export const db = getFirestore(app);
@@ -27,6 +28,22 @@ export async function getArticle(id) {
 	return data;
 }
 
+export async function getArticles(){
+	const articles = [];
+
+	const q = await getDocs(collection(db,'articles'));
+	q.forEach((doc) => {
+		const article = {
+			id: doc.id,
+			data: doc.data()
+		};
+		
+		articles.push(article);
+		});
+		articles.sort((a,b) => a.data.date - b.data.date)
+		return articles;
+}
+
 export async function getComments(articleId) {
 	const q = query(collection(db, 'comments'), where('article', '==', articleId));
 
@@ -37,6 +54,15 @@ export async function getComments(articleId) {
 	});
 	list.sort((a, b) => a.date - b.date);
 	return list;
+}
+
+export async function getCommentCount(articleId) {
+	const commentQuery = query(
+	  collection(db, 'comments'),
+	  where('article', '==', articleId)
+	);
+	const commentSnapshot = await getCountFromServer(commentQuery);
+	return commentSnapshot.data().count; 
 }
 
 export async function addComment(articleId, content) {
