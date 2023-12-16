@@ -1,10 +1,11 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { addArticle } from '$lib/firestore';
 
 	let title = '';
 	let content = '';
 
-	function submit() {
+	async function submit() {
 		if (!title) {
 			alert('제목을 입력하세요.');
 			return;
@@ -15,9 +16,9 @@
 			return;
 		}
 
-		// firebase에 어쩌구
+		const newArticleId = await addArticle(title, content);
 
-		goto('/main/article/sedjqwiuhrqwuhuik');
+		goto('/main/article/' + newArticleId);
 	}
 </script>
 

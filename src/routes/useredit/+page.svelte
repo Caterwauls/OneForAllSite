@@ -1,53 +1,58 @@
 <script>
-	let user = {
-		profileImage: 'path/to/profile.jpg',
-		username: 'JohnDoe',
-		email: 'john@example.com',
-		profileDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-		postCount: 10,
-		commentCount: 25
-	};
+	import { isLoggedIn, user, userId } from '$lib/auth';
+	import { getUserInfo, setUserInfo } from '$lib/firestore';
+	import { goto } from '$app/navigation';
 
-    function navigateToUserEdit() {
-    // UserEdit 페이지로 이동
-    goto('/useredit');
-  }
+	let nickname = '';
+	let profileDescription = '';
 
+	$: {
+		if ($isLoggedIn) {
+			(async () => {
+				const userInfo = await getUserInfo($userId);
+				nickname = userInfo.nickname;
+				profileDescription = userInfo.profileDescription;
+			})();
+		}
+	}
+
+	async function clickSubmit() {
+		await setUserInfo($userId, nickname, profileDescription);
+		goto('/user');
+	}
 </script>
 
 <div class="center">
 	<div class="card p-4">
 		<form>
 			<label class="label">
-				<span>User name</span>
+				<span>닉네임</span>
 				<input
 					class="input"
 					title="Input (text)"
 					type="text"
-					placeholder={" " + user.username}
+					placeholder="닉네임을 입력하세요"
+					bind:value={nickname}
 					style="margin-bottom: 15px;"
 				/>
-
-				<span>Profile Image</span>
-				<input
-					class="input"
-					title="Input (profile-Image)"
-					type="file"
-					style="margin-bottom: 30px;"
-				/>
 			</label>
-            <label class="label">
-				<span>Profile Description</span>
+			<label class="label">
+				<span>프로필 설명</span>
 				<textarea
 					class="textarea"
+					bind:value={profileDescription}
 					rows="4"
-					placeholder={" " + user.profileDescription}
+					placeholder="프로필 설명을 입력하세요"
 					style="margin-bottom: 30px;"
 				/>
 			</label>
-            <a href="/user" class="btn absolute right-4 bottom-4 bg-blue-500 text-white px-4 py-2 rounded">
-				Submit
-			</a>
+			<div class="flex">
+				<a href="/user" class="btn bg-gray-500 text-white px-4 py-2 rounded">돌아가기</a>
+				<div class="flex-1"></div>
+				<button class="btn bg-blue-500 text-white px-4 py-2 rounded" on:click={clickSubmit}
+					>수정</button
+				>
+			</div>
 		</form>
 	</div>
 </div>
@@ -62,8 +67,7 @@
 
 	.card {
 		width: 400px;
-		height: 500px;
-        position:relative
+		position: relative;
 		/* 다른 스타일들 */
 	}
 

@@ -1,7 +1,7 @@
 <script>
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { auth, isLoggedIn } from '../lib/auth';
+	import { auth, isLoggedIn, user } from '../lib/auth';
 	import { signOut } from 'firebase/auth';
 
 	async function logout() {
@@ -21,8 +21,8 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				{#if $isLoggedIn}
-					<a class="btn btn-sm variant-ghost-surface" href="/user" target="_blank" rel="noreferrer">
-						User
+					<a class="btn btn-sm variant-ghost-surface" href="/user">
+						{$user.email}
 					</a>
 					<button type="button" class="btn variant-filled" on:click={logout}>로그아웃</button>
 				{:else}

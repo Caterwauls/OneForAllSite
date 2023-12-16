@@ -1,33 +1,42 @@
 <script>
-	import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-	// 클릭 시 input box를 토글하는 함수
-	function toggleSignUpForm() {
-		const signUpForm = document.getElementById('signup-form');
-		signUpForm.classList.toggle('hidden');
-	}
-
-	// Submit 버튼 클릭 시 처리하는 함수
-	function submitSignUp() {
-		// 입력된 ID와 Password를 가져오기
-		const idValue = document.getElementById('idInput').value;
-		const pwValue = document.getElementById('pwInput').value;
-
-		// 여기에 입력된 ID와 Password를 사용하여 회원가입 처리하는 로직을 추가
-		console.log('ID:', idValue);
-		console.log('Password:', pwValue);
-
-		// 추가로 필요한 작업을 수행하세요 (예: 서버로 데이터 전송 등)
-	}
+	import {
+		signInWithPopup,
+		GoogleAuthProvider,
+		createUserWithEmailAndPassword,
+		signInWithEmailAndPassword
+	} from 'firebase/auth';
+	import { auth } from '$lib/auth';
 
 	async function signInWithGoogle() {
 		const provider = new GoogleAuthProvider();
-		const auth = getAuth();
-		const result = await signInWithPopup(auth, provider);
-		const credential = GoogleAuthProvider.credentialFromResult(result);
-		const token = credential.accessToken;
-		// The signed-in user info.
-		const user = result.user;
-		console.log(user);
+		await signInWithPopup(auth, provider);
+	}
+
+	let email = '';
+	let password = '';
+
+	async function login() {
+		if (!email || !password) {
+			alert('이메일과 비밀번호를 입력하세요.');
+			return;
+		}
+		try {
+			await signInWithEmailAndPassword(auth, email, password);
+		} catch (err) {
+			alert('잘못된 이메일이나 비밀번호를 입력하셨습니다.\n\n' + err.message);
+		}
+	}
+
+	async function signUp() {
+		if (!email || !password) {
+			alert('이메일과 비밀번호를 입력하세요.');
+			return;
+		}
+		try {
+			await createUserWithEmailAndPassword(auth, email, password);
+		} catch (err) {
+			alert('이메일이나 비밀번호의 형식이 잘못되었습니다.\n\n' + err.message);
+		}
 	}
 </script>
 
@@ -78,18 +87,18 @@ m6863 19 c327 -46 605 -171 841 -378 439 -384 649 -1063 517 -1677 -134 -625
 			<div id="signup-form">
 				<input
 					type="text"
-					placeholder=" Enter your ID"
+					placeholder="이메일"
 					class="input"
-					id="idInput"
 					style="margin-bottom: 10px;"
+					bind:value={email}
 				/>
-				<input type="password" placeholder=" Enter your Password" class="input" id="pwInput" />
+				<input type="password" placeholder="비밀번호" class="input" bind:value={password} />
 			</div>
 
 			<div class="flex justify-center space-x-7">
 				<!-- Submit 버튼 -->
 				<div class="flex justify-center space-x-2">
-					<a class="btn variant-filled" href="/" onclick="submitSignUp()">Submit</a>
+					<button class="btn variant-filled" on:click={login}>로그인</button>
 				</div>
 
 				<!-- "or" 문구 -->
@@ -99,11 +108,11 @@ m6863 19 c327 -46 605 -171 841 -378 439 -384 649 -1063 517 -1677 -134 -625
 
 				<!-- Sign Up 버튼 -->
 				<div class="flex justify-center space-x-2">
-					<a class="btn variant-filled" href="/signup" onclick="toggleSignUpForm()">Sign Up</a>
+					<button class="btn variant-filled" on:click={signUp}>계정 생성</button>
 				</div>
 			</div>
 			<div class="flex justify-center space-x-2">
-				<a class="btn variant-filled" on:click={signInWithGoogle}>Sign in with Google</a>
+				<button class="btn variant-filled" on:click={signInWithGoogle}>구글로 로그인</button>
 			</div>
 		</div>
 	</div>

@@ -8,6 +8,7 @@
 		getArticles,
 		getCommentCount
 	} from '$lib/firestore';
+	import Author from './Author.svelte';
 
 	let articleList = [];
 	let commentCounts = [];
@@ -21,40 +22,42 @@
 	});
 
 	let highlightedBoard = null;
+
+	function goToWritePage() {
+		goto('/main/write');
+	}
 </script>
 
 <div class="center">
 	<div class="bg-card">
 		<div class="wrapper">
-			<div class="active-list-label p-3 mb-4 text-center font-bold bg-gray-200 text-black">
-				게시물 (최신순)
+			<div
+				class="active-list-label p-3 mb-4 flex justify-between items-center font-bold bg-gray-200 text-black"
+			>
+				<span>게시물 (최신순)</span>
+				<button
+					on:click={goToWritePage}
+					class="text-white bg-black px-3 py-1 rounded hover:bg-gray-700 transition-colors"
+				>
+					글쓰기
+				</button>
 			</div>
 			<div class="list-card p-4 bg-white overflow-y-auto relative z-10">
 				<ul class="list p-4">
 					{#each articleList as article}
 						<a href="/main/article/{article.id}">
 							<li
-								class="flex items-center space-x-4 mb-1"
+								class="flex items-center mb-1"
 								on:mouseenter={() => (highlightedBoard = article.id)}
 								on:mouseleave={() => (highlightedBoard = null)}
 								class:selected={highlightedBoard === article.id}
 							>
-								<span class="rounded-full overflow-hidden bg-gray-300 w-10 h-10">
-									<img
-										src="https://loremflickr.com/300/300"
-										alt="Profile"
-										class="w-full h-full object-cover"
-									/>
-								</span>
-								<span class="flex-auto text-lg text-center text-black" style="margin-left: 50px"
-									>{article.data.title}</span
-								>
-								<span class="flex-auto text-sm text-right text-gray-600"
+								<span class="text-lg text-center text-black">{article.data.title}</span>
+								<div class="flex-1"></div>
+								<span class="text-sm text-right text-gray-600"
 									>댓글 {commentCounts[article.id]}개</span
 								>
-								<span class="flex-auto text-sm text-right text-gray-600"
-									>작성자: {article.data.author}</span
-								>
+								<Author iconSize={40} userId={article.data.author}></Author>
 							</li>
 						</a>
 						{#if article.id !== articleList.length}
