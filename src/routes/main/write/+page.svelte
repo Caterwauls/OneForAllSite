@@ -26,7 +26,7 @@
 	<div class="container">
 		<h1>글쓰기</h1>
 		<input class="input" type="text" placeholder="제목" bind:value={title} />
-		<textarea class="textarea" rows="4" placeholder="내용을 입력하세요." bind:value={content} />
+		<textarea class="textarea" rows="20" placeholder="내용을 입력하세요." bind:value={content} />
 		<div style="display: flex; justify-content: end;">
 			<button type="button" class="btn variant-filled" on:click={submit}>등록</button>
 		</div>

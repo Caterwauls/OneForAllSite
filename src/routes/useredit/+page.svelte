@@ -5,6 +5,7 @@
 
 	let nickname = '';
 	let profileDescription = '';
+	
 
 	$: {
 		if ($isLoggedIn) {
@@ -69,13 +70,6 @@
 		width: 400px;
 		position: relative;
 		/* 다른 스타일들 */
-	}
-
-	.profile-info {
-		background-color: #4caf50;
-		padding: 1rem;
-		border-radius: 0.5rem;
-		justify-content: space-between; /* 프로필 정보와 버튼 사이의 간격을 벌리기 위해 추가 */
 	}
 
 	button {

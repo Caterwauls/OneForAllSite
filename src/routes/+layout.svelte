@@ -1,11 +1,13 @@
 <script>
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { auth, isLoggedIn, user } from '../lib/auth';
-	import { signOut } from 'firebase/auth';
+	import { auth, isLoggedIn, user, userId } from '../lib/auth';
+	import { FacebookAuthProvider, signOut } from 'firebase/auth';
+	import {goto} from '$app/navigation'
 
 	async function logout() {
 		await signOut(auth);
+		goto("/");
 	}
 </script>
 
@@ -21,7 +23,7 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				{#if $isLoggedIn}
-					<a class="btn btn-sm variant-ghost-surface" href="/user">
+					<a class="btn btn-sm variant-ghost-surface" href="/user/{$userId}">
 						{$user.email}
 					</a>
 					<button type="button" class="btn variant-filled" on:click={logout}>로그아웃</button>

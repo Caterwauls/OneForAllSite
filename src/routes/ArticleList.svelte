@@ -9,6 +9,7 @@
 		getCommentCount
 	} from '$lib/firestore';
 	import Author from './Author.svelte';
+	import like from '$lib/img/heart.png';
 
 	let articleList = [];
 	let commentCounts = [];
@@ -54,6 +55,15 @@
 							>
 								<span class="text-lg text-center text-black">{article.data.title}</span>
 								<div class="flex-1"></div>
+								<div class="flex">
+									<span class="py-1.5 mr-1" style="width: 15px; height: 15px">
+									<img
+										src="{like}"
+										alt="like"
+									/>
+								</span>
+								<span class="text-black opacity-70 mr-5">x{article.data.likeUsers.length}</span>
+								</div>
 								<span class="text-sm text-right text-gray-600"
 									>댓글 {commentCounts[article.id]}개</span
 								>

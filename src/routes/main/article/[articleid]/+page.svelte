@@ -74,7 +74,9 @@
 					</div>
 					<p class="text-gray-600">조회수: {articleData.readCount}</p>
 				</div>
-				<p class="text-gray-600 mb-4" style="margin-top: 50px;">{articleData.content}</p>
+				<p class="text-gray-600 mb-4 whitespace-pre-line" style="margin-top: 50px;">
+					{articleData.content}
+				</p>
 				<div class="flex justify-between items-center space-x-4 mb-4" style="margin-top: 50px;">
 					<button class="chip variant-filled hover:variant-filled-primary" on:click={clickLike}>
 						<span>{articleData.likeUsers.length}</span>
@@ -86,7 +88,7 @@
 					{#if comments.length > 0}
 						{#each comments as comment (comment.id)}
 							<div class="comment-item p-2 mb-2 bg-gray-100 rounded">
-								<p class="text-sm text-black">{comment.content}</p>
+								<p class="text-sm text-black whitespace-pre-line">{comment.content}</p>
 								<div class="flex">
 									<div class="flex-1"></div>
 									<div class="flex text-xs text-gray-500 mr-2">

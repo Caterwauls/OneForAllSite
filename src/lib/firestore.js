@@ -48,7 +48,7 @@ export async function getArticles() {
 
 		articles.push(article);
 	});
-	articles.sort((a, b) => a.data.date - b.data.date);
+	articles.sort((a, b) =>  b.data.date - a.data.date);
 	return articles;
 }
 
@@ -126,6 +126,24 @@ export async function deleteArticle(id) {
 	}
 
 	await deleteDoc(doc(db, 'articles', id));
+}
+
+export async function getCurrentUserOutPuts(id){
+	const data = {
+		commentCount: 0,
+		articleCount: 0,
+	};
+
+	const commentQuery = query(collection(db, 'comments'), where('author', '==', id));
+	const commentSnapshot = await getCountFromServer(commentQuery);
+	data.commentCount = commentSnapshot.data().count;
+
+	const articleQuery = query(collection(db, 'articles'), where('author', '==', id));
+	const articleSnapshot = await getCountFromServer(articleQuery);
+	data.articleCount = articleSnapshot.data().count;
+
+	return data;
+
 }
 
 export async function getUserInfo(id) {
