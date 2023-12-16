@@ -3,6 +3,15 @@
 	import { getUserInfo } from '$lib/firestore';
 	import AuthenticationForm from '../AuthenticationForm.svelte';
 
+	let abcd = {
+		profileImage: 'https://loremflickr.com/360/360',
+		username: 'JohnDoe',
+		email: 'john@example.com',
+		profileDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		postCount: 10,
+		commentCount: 25
+	};
+
 	let userInfo = {
 		nickname: '',
 		profileDescription: ''
@@ -28,7 +37,7 @@
 			<form>
 				<div class="flex items-center space-x-4 profile-info">
 					<!-- 프로필 사진 -->
-					<img src={'https://loremflickr.com/360/360'} alt="Profile" class="w-16 h-16 rounded-full" />
+					<img src={abcd.profileImage} alt="Profile" class="w-16 h-16 rounded-full" />
 
 					<!-- 유저 정보 -->
 					<div>
